@@ -1,0 +1,8 @@
+.idea/
+media/
+.flake8
+.env
+*.sqlite3
+
+venv/
+__pycache__/
