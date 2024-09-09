@@ -49,7 +49,7 @@ async def process_stat_command(message: Message):
     )
 
 
-# Этот хэндлер будет срабатывать на команду "/cancel"
+
 @dp.message(Command(commands='cancel'))
 async def process_cancel_command(message: Message):
     """

@@ -34,7 +34,7 @@ async def menu(message: types.Message):
 
     with suppress(TelegramBadRequest):
         await message.answer(
-            "Выбери, что ты хочешь:",
+            'Выбери, что ты хочешь:',
             reply_markup=builder.as_markup())
 
 
