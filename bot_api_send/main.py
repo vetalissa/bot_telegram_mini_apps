@@ -7,10 +7,6 @@ from loader import bot, dp
 
 
 async def main() -> None:
-    """
-    Регистрация обработчиков команды /start и эха.
-    Запуск процесса опроса для получения обновлений.
-    """
     dp.message.register(cmd_start)
     dp.message.register(menu)
     dp.message.register(answer_for_message)
