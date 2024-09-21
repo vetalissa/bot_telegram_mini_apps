@@ -8,6 +8,7 @@ from loader import dp
 # Количество попыток, доступных пользователю в игре
 ATTEMPTS = 10
 
+# кнопки согласия на начало игры
 yes_no_bd = [[KeyboardButton(text='Давай'),
               KeyboardButton(text='Нет')]]
 yes_no_kb = ReplyKeyboardMarkup(
@@ -15,10 +16,28 @@ yes_no_kb = ReplyKeyboardMarkup(
     resize_keyboard=True,
     one_time_keyboard=True)
 
+# Клавиатура с цифрами для игры
+num_ls = []
+num_buttons = []
+
+for i in range(1, 101):
+    num_ls.append(KeyboardButton(text=str(i)))
+    if not i % 9:
+        num_buttons.append(num_ls)
+        num_ls = []
+
+num_buttons.append([KeyboardButton(text='100')])
+num_keyboard = ReplyKeyboardMarkup(
+    keyboard=num_buttons,
+    resize_keyboard=True)
+
 # Словарь, в котором будут храниться данные пользователя
 user = {'in_game': False,
         'secret_number': None,
-        'attempts': None}
+        'attempts': None,
+        'count_game': 0,
+        'win': 0,
+        'loss': 0}
 
 
 # Функция возвращающая случайное целое число от 1 до 100
@@ -32,7 +51,10 @@ async def process_start_command(message: Message):
         'Привет!\nДавайте сыграем в игру "Угадай число"?\n\n'
         'Я загадываю число от 1 до 100, \n'
         f'а вам нужно его угадать\nУ вас есть {ATTEMPTS} попыток\n'
-        'Для завершения игры, напишите /cancel',
+        'Для завершения игры, напишите /cancel'
+        f'Количество побед: {user["win"]}\n'
+        f'Количество проигрышей: {user["loss"]}\n'
+        f'Всего игры: {user["count_game"]}\n',
         reply_markup=yes_no_kb
     )
 
@@ -65,7 +87,8 @@ async def process_positive_answer(message: Message):
         user['secret_number'] = get_random_number()
         user['attempts'] = ATTEMPTS
         await message.answer(
-            f'Ну что? Число загадано, попробуй отгадать за {ATTEMPTS} попыток'
+            f'Ну что? Число загадано, попробуй отгадать за {ATTEMPTS} попыток',
+            reply_markup=num_keyboard
         )
     else:
         await message.answer(
@@ -97,30 +120,43 @@ async def process_numbers_answer(message: Message):
         if 1 <= int(message.text) <= 100:
             if int(message.text) == user['secret_number']:
                 user['in_game'] = False
+                user['win'] += 1
+                user['count_game'] += 1
                 await message.answer(
                     ' Вы угадали число! Ура!!!\n\n'
-                    'Может, сыграем еще?'
+                    'Может, сыграем еще?\n\n'
+                    f'Количество побед: {user["win"]}\n'
+                    f'Количество проигрышей: {user["loss"]}\n'
+                    f'Всего игры: {user["count_game"]}\n',
+                    reply_markup=yes_no_kb,
                 )
             elif int(message.text) > user['secret_number']:
                 user['attempts'] -= 1
-                await message.answer(f'Мое число меньше\n\nУ вас осталось:{user["attempts"]} попыток')
+                await message.answer(f'Мое число меньше\n\nУ вас осталось:{user["attempts"]} попыток',
+                                     reply_markup=num_keyboard)
             elif int(message.text) < user['secret_number']:
                 user['attempts'] -= 1
-                await message.answer(f'Мое число больше\n\nУ вас осталось:{user["attempts"]} попыток')
+                await message.answer(f'Мое число больше\n\nУ вас осталось:{user["attempts"]} попыток',
+                                     reply_markup=num_keyboard)
 
             if user['attempts'] == 0:
                 user['in_game'] = False
+                user['loss'] += 1
+                user['count_game'] += 1
                 await message.answer(
-                    f'К сожалению, у вас больше не осталось '
-                    f'попыток. Вы проиграли 😰\n\nМое число '
-                    f'было {user["secret_number"]}\n\nДавайте '
-                    f'сыграем еще?',
+                    'К сожалению, у вас больше не осталось попыток\n'
+                    'Вы проиграли 😰\n\n'
+                    f'Мое число было {user["secret_number"]}\n\n'
+                    'Давайте сыграем еще?\n\n'
+                    f'Количество побед: {user["win"]}\n'
+                    f'Количество проигрышей: {user["loss"]}\n'
+                    f'Всего игры: {user["count_game"]}\n',
                     reply_markup=yes_no_kb
                 )
         else:
             await message.answer(
                 'Это не похоже на нужное число... '
                 'Присылай только числа от 1 до 100\n'
-                'Для завершения игры, напишите /cancel или любое слово'            )
+                'Для завершения игры, напишите /cancel или любое слово', reply_markup=num_keyboard)
     else:
         await message.answer('Это что число? Хотите сыграть?', reply_markup=yes_no_kb)
