@@ -1,5 +1,6 @@
 import bot_send_media
 import rsp_gamebot
+import guess_num
 from aiogram.filters import CommandStart
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from aiogram.utils.markdown import hbold

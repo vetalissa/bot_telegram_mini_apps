@@ -8,6 +8,13 @@ from loader import dp
 # Количество попыток, доступных пользователю в игре
 ATTEMPTS = 10
 
+yes_no_bd = [[KeyboardButton(text='Давай'),
+              KeyboardButton(text='Нет')]]
+yes_no_kb = ReplyKeyboardMarkup(
+    keyboard=yes_no_bd,
+    resize_keyboard=True,
+    one_time_keyboard=True)
+
 # Словарь, в котором будут храниться данные пользователя
 user = {'in_game': False,
         'secret_number': None,
@@ -21,13 +28,6 @@ def get_random_number() -> int:
 
 @dp.message(F.text == 'Поиграть в игру "отгадай цифру"')
 async def process_start_command(message: Message):
-    yes_no_bd = [[KeyboardButton(text='Давай'),
-                  KeyboardButton(text='Нет')]]
-    yes_no_kb = ReplyKeyboardMarkup(
-        keyboard=yes_no_bd,
-        resize_keyboard=True,
-        one_time_keyboard=True)
-
     await message.answer(
         'Привет!\nДавайте сыграем в игру "Угадай число"?\n\n'
         'Я загадываю число от 1 до 100, \n'
@@ -114,13 +114,13 @@ async def process_numbers_answer(message: Message):
                     f'К сожалению, у вас больше не осталось '
                     f'попыток. Вы проиграли 😰\n\nМое число '
                     f'было {user["secret_number"]}\n\nДавайте '
-                    f'сыграем еще?'
+                    f'сыграем еще?',
+                    reply_markup=yes_no_kb
                 )
         else:
             await message.answer(
                 'Это не похоже на нужное число... '
                 'Присылай только числа от 1 до 100\n'
-                'Для завершения игры, напишите /cancel или любое слово'
-            )
+                'Для завершения игры, напишите /cancel или любое слово'            )
     else:
-        await message.answer('Это что число? Хотите сыграть?')
+        await message.answer('Это что число? Хотите сыграть?', reply_markup=yes_no_kb)

@@ -5,13 +5,11 @@ import sys
 from handlers import cmd_start, menu
 from loader import bot, dp
 
-from guess_num import process_start_command
 
 
 async def main() -> None:
     dp.message.register(cmd_start)
     dp.message.register(menu)
-    dp.message.register(process_start_command)
 
     await dp.start_polling(bot)
 
