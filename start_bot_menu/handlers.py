@@ -14,13 +14,13 @@ async def cmd_start(message: Message) -> None:
 
 @dp.message()
 async def menu(message: Message):
-    kb = [[KeyboardButton(text='получить ответ на вопрос, да или нет?')],
-          [KeyboardButton(text='посмотреть на котиков?')],
-          [KeyboardButton(text='Поиграть в игру "отгадай цифру"')],
-          [KeyboardButton(text='Поиграть в игру "камень, ножницы, бумага"')],
-          ]
-    keyboard2 = ReplyKeyboardMarkup(
-        keyboard=kb,
+    menu_buttons = [[KeyboardButton(text='получить ответ на вопрос, да или нет?')],
+                    [KeyboardButton(text='посмотреть на котиков?')],
+                    [KeyboardButton(text='Поиграть в игру "отгадай цифру"')],
+                    [KeyboardButton(text='Поиграть в игру "камень, ножницы, бумага"')],
+                    ]
+    keyboard_menu = ReplyKeyboardMarkup(
+        keyboard=menu_buttons,
         resize_keyboard=True,
     )
-    await message.answer(text='Выбери, что ты хочешь:', reply_markup=keyboard2)
+    await message.answer(text='Выбери, что ты хочешь:', reply_markup=keyboard_menu)
