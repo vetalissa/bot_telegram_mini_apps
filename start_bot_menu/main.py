@@ -6,7 +6,6 @@ from handlers import cmd_start, menu
 from loader import bot, dp
 
 
-
 async def main() -> None:
     dp.message.register(cmd_start)
     dp.message.register(menu)
