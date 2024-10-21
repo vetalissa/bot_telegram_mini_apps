@@ -27,6 +27,7 @@ for i in range(1, 101):
         num_ls = []
 
 num_buttons.append([KeyboardButton(text='100')])
+num_buttons.append([KeyboardButton(text='выйти')])
 num_keyboard = ReplyKeyboardMarkup(
     keyboard=num_buttons,
     resize_keyboard=True)
