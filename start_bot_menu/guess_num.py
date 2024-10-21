@@ -10,7 +10,7 @@ ATTEMPTS = 10
 
 # кнопки согласия на начало игры
 yes_no_bd = [[KeyboardButton(text='Давай'),
-              KeyboardButton(text='Нет')]]
+              KeyboardButton(text='Выйти')]]
 yes_no_kb = ReplyKeyboardMarkup(
     keyboard=yes_no_bd,
     resize_keyboard=True,
@@ -53,11 +53,22 @@ async def process_start_command(message: Message):
         'Я загадываю число от 1 до 100, \n'
         f'а вам нужно его угадать\nУ вас есть {ATTEMPTS} попыток\n'
         'Для завершения игры, напишите /cancel\n\n'
+        'Для просмотра статистики, напишите /stat\n\n'
         f'Количество побед: {user["win"]}\n'
         f'Количество проигрышей: {user["loss"]}\n'
         f'Всего игры: {user["count_game"]}\n',
         reply_markup=yes_no_kb
     )
+
+
+@dp.message(Command(commands='stat'))
+async def command_static_game(message: Message):
+    await message.answer(
+        f'Количество побед: {user["win"]}\n'
+        f'Количество проигрышей: {user["loss"]}\n'
+        f'Всего игры: {user["count_game"]}\n'
+        f'Играем?\n',
+        reply_markup=num_keyboard if user['in_game'] else yes_no_kb)
 
 
 @dp.message(Command(commands='cancel'))
@@ -69,7 +80,7 @@ async def process_cancel_command(message: Message):
         user['in_game'] = False
         await message.answer(
             'Вы вышли из игры. Если захотите сыграть '
-            'снова - напишите об этом'
+            'снова - напишите об этом',
         )
     else:
         await message.answer(
