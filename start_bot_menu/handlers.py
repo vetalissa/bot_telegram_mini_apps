@@ -16,7 +16,7 @@ async def cmd_start(message: Message) -> None:
 async def menu(message: Message):
     menu_buttons = [[KeyboardButton(text='получить ответ на вопрос, да или нет?')],
                     [KeyboardButton(text='посмотреть на котиков?')],
-                    [KeyboardButton(text='Поиграть в игру "отгадай цифру"')],
+                    [KeyboardButton(text='Поиграть в игру "отгадай число"')],
                     [KeyboardButton(text='Поиграть в игру "камень, ножницы, бумага"')],
                     ]
     keyboard_menu = ReplyKeyboardMarkup(

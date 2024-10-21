@@ -46,7 +46,7 @@ def get_random_number() -> int:
     return random.randint(1, 100)
 
 
-@dp.message(F.text == 'Поиграть в игру "отгадай цифру"')
+@dp.message(F.text == 'Поиграть в игру "отгадай число"')
 async def process_start_command(message: Message):
     await message.answer(
         'Привет!\nДавайте сыграем в игру "Угадай число"?\n\n'
